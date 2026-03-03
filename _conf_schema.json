@@ -1,0 +1,77 @@
+{
+  "duration_settings": {
+    "description": "视频时长限制设置",
+    "type": "object",
+    "hint": "配置视频时长限制相关参数",
+    "items": {
+      "enable_limit": {
+        "description": "启用视频时长限制",
+        "type": "bool",
+        "hint": "是否启用视频时长限制功能",
+        "default": true
+      },
+      "max_duration": {
+        "description": "最大视频时长限制",
+        "type": "int",
+        "hint": "单位为秒，超过此时间的视频将不允许下载",
+        "default": 600
+      }
+    }
+  },
+  "download_quality": {
+    "description": "下载视频质量",
+    "type": "string",
+    "hint": "选择下载的视频质量等级",
+    "default": "highest",
+    "options": ["highest", "high", "medium", "low"]
+  },
+  "auto_cleanup": {
+    "description": "自动清理下载文件",
+    "type": "bool",
+    "hint": "下载完成后是否自动删除临时文件和视频文件",
+    "default": true
+  },
+  "concurrent_downloads": {
+    "description": "并发下载数量",
+    "type": "int",
+    "hint": "同时进行的下载任务数量，建议根据网络情况调整",
+    "default": 3
+  },
+  "timeout": {
+    "description": "下载超时时间",
+    "type": "int",
+    "hint": "单位为秒，下载请求的超时时间",
+    "default": 30
+  },
+  "enable_private_chat": {
+    "description": "启用私聊功能",
+    "type": "bool",
+    "hint": "是否允许在私聊中使用下载功能",
+    "default": true
+  },
+  "enable_group_chat": {
+    "description": "启用群聊功能",
+    "type": "bool",
+    "hint": "是否允许在群聊中使用下载功能",
+    "default": true
+  },
+  "advanced_settings": {
+    "description": "高级设置",
+    "type": "object",
+    "hint": "高级网络和请求设置",
+    "items": {
+      "user_agent": {
+        "description": "User-Agent",
+        "type": "string",
+        "hint": "请求时使用的浏览器标识",
+        "default": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
+      },
+      "referer": {
+        "description": "Referer",
+        "type": "string",
+        "hint": "请求来源页面",
+        "default": "https://www.bilibili.com/"
+      }
+    }
+  }
+}

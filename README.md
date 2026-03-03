@@ -1,14 +1,159 @@
-# astrbot-plugin-helloworld
+# B站视频下载器插件
 
-AstrBot 插件模板 / A template plugin for AstrBot plugin feature
+一个用于AstrBot的B站视频下载插件，支持通过命令方式下载B站视频。
 
-> [!NOTE]
-> This repo is just a template of [AstrBot](https://github.com/AstrBotDevs/AstrBot) Plugin.
-> 
-> [AstrBot](https://github.com/AstrBotDevs/AstrBot) is an agentic assistant for both personal and group conversations. It can be deployed across dozens of mainstream instant messaging platforms, including QQ, Telegram, Feishu, DingTalk, Slack, LINE, Discord, Matrix, etc. In addition, it provides a reliable and extensible conversational AI infrastructure for individuals, developers, and teams. Whether you need a personal AI companion, an intelligent customer support agent, an automation assistant, or an enterprise knowledge base, AstrBot enables you to quickly build AI applications directly within your existing messaging workflows.
+## 功能特点
 
-# Supports
+- 📥 命令触发模式下载B站视频
+- 🖼️ 支持获取视频封面图片
+- 🎯 支持BV号、AV号、完整链接、短链接等多种格式
+- 🔗 智能短链接解析（支持b23.tv格式）
+- ⏱️ 可控的视频时长限制功能（可开关）
+- 📊 下载前显示详细视频信息（标题、UP主、时长、播放量）
+- ⚡ 支持视频和音频自动合并
+- 🗑️ 自动清理临时文件
+- ⚙️ 完全可视化配置管理（需要AstrBot v4.0+）
+- 🔧 调试命令支持，便于排查问题
 
-- [AstrBot Repo](https://github.com/AstrBotDevs/AstrBot)
-- [AstrBot Plugin Development Docs (Chinese)](https://docs.astrbot.app/dev/star/plugin-new.html)
-- [AstrBot Plugin Development Docs (English)](https://docs.astrbot.app/en/dev/star/plugin-new.html)
+## 配置管理
+
+### 可视化配置（唯一方式）
+插件完全依赖AstrBot的可视化配置系统，在管理面板中配置：
+- 是否启用时长限制（总开关）
+- 最大视频时长限制（当时长限制开启时显示）
+- 下载质量设置
+- 并发下载数量
+- 超时时间配置
+- 私聊/群聊权限控制
+- 高级网络设置
+
+## 使用方法
+
+### 下载视频命令
+
+```
+/b23 d BV1xxxxxxxxxx
+/b23 d av123456
+/b23 d https://www.bilibili.com/video/BV1xxxxxxxxxx
+/b23 d https://b23.tv/u1tokcj
+/b23 d b23.tv/rj9lNV1
+```
+
+### 获取视频封面命令
+
+```
+/b23 cover BV1xxxxxxxxxx
+/b23 cover https://b23.tv/u1tokcj
+/b23 cover b23.tv/rj9lNV1
+```
+
+### 控制命令
+
+```
+/b23 toggle_limit  # 开启/关闭视频时长限制
+/b23 test https://b23.tv/xxxxxx  # 测试短链接解析功能
+```
+
+### 其他管理命令
+
+```
+/b23 help     # 显示帮助信息
+/b23 config   # 查看当前配置
+/b23 stats    # 查看下载统计
+/b23 clean    # 清理临时文件
+```
+
+## 支持的视频标识格式
+
+- BV号：`BV1xxxxxxxxxx`
+- AV号：`av123456`
+- 完整链接：`https://www.bilibili.com/video/BV1xxxxxxxxxx`
+- 短链接：`https://b23.tv/xxxxxxx`
+- 简写短链接：`b23.tv/xxxxxxx`
+
+## 配置选项
+
+| 配置项 | 默认值 | 说明 |
+|--------|--------|------|
+| duration_settings | object | 视频时长限制设置（包含子选项）|
+| ├── enable_limit | true | 是否启用时长限制 |
+| ├── max_duration | 600 | 最大视频时长（秒），仅当时长限制开启时生效 |
+| download_quality | highest | 下载质量 |
+| auto_cleanup | true | 自动清理临时文件 |
+| concurrent_downloads | 3 | 并发下载数 |
+| timeout | 30 | 请求超时时间（秒）|
+| enable_private_chat | true | 启用私聊下载 |
+| enable_group_chat | true | 启用群聊下载 |
+
+## 依赖要求
+
+- FFmpeg（用于视频音频合并）
+- Python 3.10+
+- requests（用于短链接解析）
+- aiohttp
+- aiofiles
+- AstrBot v4.0+
+
+## 注意事项
+
+- 时长限制功能可随时开启/关闭，关闭后可下载任意时长视频
+- 需要安装FFmpeg才能正常使用下载功能
+- 封面获取功能无需额外依赖
+- 下载完成后会自动清理临时文件
+- 命令触发模式，避免自动下载造成的资源浪费
+- 需要AstrBot v4.0+版本支持可视化配置
+- 短链接解析需要网络连接，可能会有延迟
+
+## 版本历史
+
+### v1.6.1
+- ✅ 重新设计配置结构，将最大时长限制作为时长限制功能的子选项
+- ✅ 优化配置显示逻辑，当时长限制关闭时不显示最大时长配置
+- ✅ 更新配置读取逻辑以适应嵌套结构
+- ✅ 完善用户界面提示信息
+
+### v1.6.0
+- ✅ 添加视频时长限制控制功能
+- ✅ 支持通过命令动态开启/关闭时长限制
+- ✅ 新增 `/b23 toggle_limit` 命令
+- ✅ 配置界面添加时长限制开关选项
+- ✅ 更新帮助和配置命令显示相关信息
+
+### v1.5.2
+- ✅ 修复短链接解析优先级问题
+- ✅ 完善短链接HTTP重定向解析逻辑
+- ✅ 添加调试命令用于排查解析问题
+- ✅ 增强错误处理和日志记录
+
+### v1.5.1
+- ✅ 修复短链接解析功能，正确处理HTTP重定向
+- ✅ 改进测试命令的输出信息
+- ✅ 添加详细的解析过程日志
+
+### v1.5.0
+- ✅ 完全移除传统 [config.json](file://c:\Users\20329\.astrbot_launcher\instances\f3d735af-4308-4832-9ebb-81824509a0af\core\data\cmd_config.json) 配置文件支持
+- ✅ 仅支持AstrBot可视化配置系统
+- ✅ 简化插件代码结构，移除冗余的配置管理代码
+- ✅ 添加AstrBot版本依赖要求（v4.0+）
+
+### v1.4.0
+- 添加AstrBot可视化配置支持
+- 支持在管理面板直接配置插件参数
+- 保留传统配置文件兼容性
+
+### v1.3.0
+- 添加获取视频封面功能（/b23 cover）
+- 支持直接发送封面图片到聊天界面
+- 封面获取无需FFmpeg依赖
+
+### v1.2.0
+- 添加命令简写支持（/b23 d）
+- 下载前显示详细视频信息
+- 播放量数字格式化显示
+
+### v1.1.0  
+- 改为命令触发模式
+- 移除自动消息监听功能
+
+### v1.0.0
+- 初始版本，自动监听模式
